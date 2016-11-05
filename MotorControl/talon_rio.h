@@ -6,9 +6,9 @@
 #define PACKET_STARTUP_LEN 6
 void packetStartupVersion(uint8_t buf[8], byte fwMaj, byte fwMin);
 
-#define PACKET_HBEAT 0x02041400
-#define PACKET_HBEAT_LEN 8
-void packetHbeatReportedThrottle(uint8_t buf[8], float throttle);
+#define PACKET_STATUS 0x02041400
+#define PACKET_STATUS_LEN 8
+void packetStatusReportedThrottle(uint8_t buf[8], float throttle);
 
 #define PACKET_ENCODER 0x02041480
 #define PACKET_ENCODER_LEN 8

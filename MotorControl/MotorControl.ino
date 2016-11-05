@@ -34,9 +34,9 @@ void loop() {
   if(heartbeat.check())
     for(int i = 0; i<number_of_devices_to_emulate; i++){
       cleanMessage(txmsg.buf);
-      packetHbeatReportedThrottle(txmsg.buf,throttle[i]);
-      txmsg.id = PACKET_HBEAT | i;
-      txmsg.len = PACKET_HBEAT_LEN;
+      packetStatusReportedThrottle(txmsg.buf,throttle[i]);
+      txmsg.id = PACKET_STATUS | i;
+      txmsg.len = PACKET_STATUS_LEN;
       can.write(txmsg);
     }
   if(encoderTask.check())
