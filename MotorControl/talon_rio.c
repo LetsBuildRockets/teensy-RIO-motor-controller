@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include "talon_rio.h"
 
 int signExtend(unsigned int val, int bits){
   int sign_bit = 1 << (bits - 1);
@@ -16,7 +15,7 @@ void packetStartupVersion(uint8_t buf[8], byte fwMaj, byte fwMin){
 
 //HBEAT
 
-void packetStatusReportedThrottle(uint8_t buf[8], float throttle){
+void packetHbeatReportedThrottle(uint8_t buf[8], float throttle){
   int fxp = (int)(throttle*(1 >> 10));
   buf[3] = fxp >> 8;
   buf[4] = fxp;

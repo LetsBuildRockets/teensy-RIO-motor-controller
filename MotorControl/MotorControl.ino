@@ -2,7 +2,7 @@
 #include <kinetis_flexcan.h>
 #include <Metro.h>
 
-#include "talon_rio.c"
+#include "talon_rio.h"
 
 #define number_of_devices_to_emulate 4 // id from 0 to n-1
 
@@ -34,21 +34,20 @@ void loop() {
   if(heartbeat.check())
     for(int i = 0; i<number_of_devices_to_emulate; i++){
       cleanMessage(txmsg.buf);
-      packetStatusReportedThrottle(txmsg.buf,throttle[i]);
-      txmsg.id = PACKET_STATUS | i;
-      txmsg.len = PACKET_STATUS_LEN;
+      packetHbeatReportedThrottle(txmsg.buf,throttle[i]);
+      txmsg.id = PACKET_HBEAT | i;
+      txmsg.len = PACKET_HBEAT_LEN;
       can.write(txmsg);
     }
-  if(encoderTask.check())
-    for(int i = 0; i<number_of_devices_to_emulate; i++){
-      cleanMessage(txmsg.buf);
-      packetEncoderPosition(txmsg.buf,100);
-      packetEncoderRate(txmsg.buf,100);
-      txmsg.id = PACKET_ENCODER | i;
-      txmsg.len = PACKET_ENCODER_LEN;
-      can.write(txmsg);
-    
-  }
+//  if(encoderTask.check())
+//    for(int i = 0; i<number_of_devices_to_emulate; i++){
+//      cleanMessage(txmsg.buf);
+//      packetEncoderPosition(txmsg.buf,100);
+//      packetEncoderRate(txmsg.buf,100);
+//      txmsg.id = PACKET_ENCODER | i;
+//      txmsg.len = PACKET_ENCODER_LEN;
+//      can.write(txmsg);
+//    }
   if(can.read(rxmsg)){
     bool unrequited_packet = false;
     if(rxmsg.id == PACKET_DISABLE){
@@ -70,13 +69,13 @@ void loop() {
           break;
         }
         default:
-          //unrequited_packet = true;
-          //Serial.print("?TYPE ");
+          unrequited_packet = true;
+          Serial.print("?TYPE ");
           break;
         }
       } else {
-        //unrequited_packet = true;
-        //Serial.print("?ADDR ");
+        unrequited_packet = true;
+        Serial.print("?ADDR ");
       }
     }
     if(unrequited_packet){
